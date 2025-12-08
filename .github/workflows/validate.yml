@@ -1,0 +1,22 @@
+name: Validate Scripts
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install PowerShell
+      uses: actions/setup-powershell@v1
+    
+    - name: Validate PowerShell syntax
+      run: |
+        pwsh -Command "Get-ChildItem -Path scripts -Filter *.ps1 | ForEach-Object { Write-Host \"Validating $($_.Name)...\"; pwsh -File $_.FullName -WhatIf 2>&1 | Out-Null; if ($LASTEXITCODE -ne 0) { exit 1 } }"
+
