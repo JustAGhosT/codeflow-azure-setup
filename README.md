@@ -62,7 +62,7 @@ codeflow-azure-setup/
 - ❌ Production CA environments, VNets, DNS
 - ❌ Anything that would require maintaining IaC in two places
 
-For CodeFlow-specific or production-grade infrastructure, see [`codeflow-infrastructure`](../codeflow-infrastructure).
+For CodeFlow-specific or production-grade infrastructure, see [`codeflow-infrastructure`](https://github.com/JustAGhosT/codeflow-infrastructure).
 
 ## License
 
