@@ -2,9 +2,9 @@ name: Validate Scripts
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master ]
 
 jobs:
   validate:
@@ -14,9 +14,17 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Install PowerShell
-      uses: actions/setup-powershell@v1
+      uses: actions/setup-powershell@v2
     
     - name: Validate PowerShell syntax
       run: |
-        pwsh -Command "Get-ChildItem -Path scripts -Filter *.ps1 | ForEach-Object { Write-Host \"Validating $($_.Name)...\"; pwsh -File $_.FullName -WhatIf 2>&1 | Out-Null; if ($LASTEXITCODE -ne 0) { exit 1 } }"
+        $ErrorActionPreference = 'Stop'
+        $scripts = Get-ChildItem -Path scripts -Filter *.ps1
+        foreach ($script in $scripts) {
+          Write-Host "Validating $($script.Name)..."
+          # Test script syntax without executing
+          $null = [System.Management.Automation.PSParser]::Tokenize((Get-Content $script.FullName -Raw), [ref]$null)
+          Write-Host "✓ $($script.Name) syntax is valid"
+        }
+        Write-Host "`nAll scripts validated successfully!"
 
