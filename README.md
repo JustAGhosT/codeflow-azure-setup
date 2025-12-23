@@ -1,70 +1,77 @@
-# CodeFlow Azure Setup Scripts
+# ⚠️ DEPRECATED - Repository Archived
 
-Generic, org-agnostic PowerShell scripts to bootstrap Azure environments for new repositories using the `org-env-project-type-region` naming convention.
+> **This repository has been merged into [codeflow-orchestration](https://github.com/JustAGhosT/codeflow-orchestration).**
 
-## Purpose
+---
 
-This repository contains reusable Azure infrastructure bootstrapping scripts that can be used for **any** repository or project. These scripts are:
+## New Location
 
-- **Generic**: No app-specific assumptions
-- **Reusable**: Work for any project with the naming convention
-- **Org-agnostic**: Use parameters (OrgCode, Environment, Project) rather than hard-coded values
+All Azure bootstrap scripts have been moved to the `codeflow-orchestration` repository:
 
-## Quick Start
+| Component | Old Location | New Location |
+|-----------|--------------|--------------|
+| PowerShell Scripts | `scripts/` | `codeflow-orchestration/bootstrap/scripts/` |
+| Documentation | `scripts/README-AZURE-SETUP.md` | `codeflow-orchestration/bootstrap/README.md` |
+| CI/CD Workflows | `.github/workflows/` | `codeflow-orchestration/bootstrap/.github/workflows/` |
 
-See the [scripts documentation](scripts/README-AZURE-SETUP.md) for detailed usage instructions.
+---
 
-### Example
+## Migration Guide
+
+### Clone the New Repository
+
+```bash
+git clone https://github.com/JustAGhosT/codeflow-orchestration.git
+cd codeflow-orchestration/bootstrap/scripts
+```
+
+### Update Your Script References
+
+If you have scripts or workflows referencing this repository, update them:
 
 ```powershell
-.\scripts\New-AzRepoEnvironment.ps1 `
-  -OrgCode nl `
-  -Environment dev `
-  -Project myproject `
-  -RegionShort san `
-  -Location southafricanorth `
-  -SubscriptionId <your-subscription-id> `
-  -CreateKeyVault `
-  -OutputJsonPath ./az-env-dev-myproject.json
+# Old
+./codeflow-azure-setup/scripts/New-AzRepoEnvironment.ps1
+
+# New
+./codeflow-orchestration/bootstrap/scripts/New-AzRepoEnvironment.ps1
 ```
 
-## Scripts
+### Update Your Bookmarks
 
-1. **`New-AzRepoEnvironment.ps1`** - Creates core Azure infrastructure (resource group, storage, Log Analytics, App Insights, optional Key Vault)
-2. **`New-AzRepoFullEnvironment.ps1`** - Creates full environment including App Service, Web App, Container Apps, and managed identity
-3. **`Set-GitHubSecretsFromJson.ps1`** - Creates GitHub repository secrets from JSON output
+- **Old:** `https://github.com/JustAGhosT/codeflow-azure-setup`
+- **New:** `https://github.com/JustAGhosT/codeflow-orchestration/tree/main/bootstrap`
 
-## Requirements
+---
 
-- PowerShell 7+
-- Azure CLI (`az`) - logged in and targeting correct subscription
-- GitHub CLI (`gh`) - for secrets helper script
+## Available Scripts (New Location)
 
-## Repository Structure
+All scripts are now at `codeflow-orchestration/bootstrap/scripts/`:
 
-```
-codeflow-azure-setup/
-├── scripts/
-│   ├── New-AzRepoEnvironment.ps1
-│   ├── New-AzRepoFullEnvironment.ps1
-│   ├── Set-GitHubSecretsFromJson.ps1
-│   └── README-AZURE-SETUP.md
-└── README.md (this file)
-```
+| Script | Purpose |
+|--------|---------|
+| `New-AzRepoEnvironment.ps1` | Create core Azure resources (RG, Storage, Log Analytics, App Insights) |
+| `New-AzRepoFullEnvironment.ps1` | Full environment with App Service, Container Apps, Managed Identity |
+| `Set-GitHubSecretsFromJson.ps1` | Configure GitHub secrets from Azure output |
 
-## Important Boundary Rule
+---
 
-**This repository contains ONLY generic bootstrap scripts.**
+## Why This Change?
 
-- ✅ Generic, reusable scripts
-- ✅ Org-agnostic naming (OrgCode, Environment, Project parameters)
-- ❌ CodeFlow-specific infrastructure
-- ❌ Production CA environments, VNets, DNS
-- ❌ Anything that would require maintaining IaC in two places
+1. **Single source of truth** - All infrastructure and orchestration in one place
+2. **Clear separation** - Bootstrap (generic) vs Infrastructure (CodeFlow-specific)
+3. **Simplified maintenance** - One repository to manage
+4. **Reduced repository sprawl** - 7 repos → 5 repos
 
-For CodeFlow-specific or production-grade infrastructure, see [`codeflow-infrastructure`](https://github.com/JustAGhosT/codeflow-infrastructure).
+---
 
-## License
+## Questions?
 
-MIT
+If you have questions about this migration, please:
+1. Open an issue in [codeflow-orchestration](https://github.com/JustAGhosT/codeflow-orchestration/issues)
+2. Review the [Infrastructure Consolidation Plan](https://github.com/JustAGhosT/codeflow-orchestration/blob/main/docs/INFRASTRUCTURE_CONSOLIDATION_PLAN.md)
 
+---
+
+**Archived:** 2025-01-XX
+**Migration completed by:** Infrastructure Team
